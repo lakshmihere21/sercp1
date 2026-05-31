@@ -48,11 +48,18 @@ app.use(morgan('dev'));
 // Static uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+console.log('MONGO_URI:', process.env.MONGO_URI);
+
 // ─── Database ─────────────────────────────────────────────────────────────────
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch((err) => { console.error('❌ MongoDB Error:', err.message); process.exit(1); });
-
+  .then(() => {
+    console.log('✅ MongoDB Connected');
+  })
+  .catch((err) => {
+    console.error('❌ FULL ERROR:');
+    console.error(err);
+    process.exit(1);
+  });
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth',          require('./routes/auth.routes'));
 app.use('/api/users',         require('./routes/user.routes'));
@@ -94,4 +101,4 @@ server.listen(PORT, () => {
   console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
 });
 
-module.exports = { app, server, io };
+
